@@ -1,7 +1,38 @@
-const heapsort = (arr) => {
-  /* Your code here */
-  
+const heapsort = arr => {
+  //take random array and generate the heap
+  const heap = new Heap();
+
+  arr.forEach(element => {
+    heap.insert(element);
+  });
+
+  //remove null value
+  heap.storage.shift();
+
+  //sort and return
+  return sortHeap(heap.storage);
 };
+
+const isSorted = arr => {
+  for (let i = 0; i < arr.length - 1; i++) {
+    if (arr[i] > arr[i + 1]) return false;
+  }
+  return true;
+};
+
+function sortHeap(arrayToSort) {
+  let tempVar;
+  while (!isSorted(arrayToSort)) {
+    for (let i = 0; i < arrayToSort.length; i++) {
+      if (arrayToSort[i] > arrayToSort[i + 1]) {
+        tempVar = arrayToSort[i];
+        arrayToSort[i] = arrayToSort[i + 1];
+        arrayToSort[i + 1] = tempVar;
+      }
+    }
+  }
+  return arrayToSort;
+}
 
 class Heap {
   constructor() {
@@ -38,9 +69,12 @@ class Heap {
   }
 
   bubbleUp(index) {
-    const parent = Math.floor(index/2);
+    const parent = Math.floor(index / 2);
     if (parent > 0 && this.storage[parent] < this.storage[index]) {
-      [this.storage[parent], this.storage[index]] = [this.storage[index], this.storage[parent]];
+      [this.storage[parent], this.storage[index]] = [
+        this.storage[index],
+        this.storage[parent]
+      ];
       this.bubbleUp(parent);
     }
   }
@@ -54,11 +88,15 @@ class Heap {
       if (this.storage[child2] === undefined) {
         maxChild = child1;
       } else if (this.storage[child2] !== undefined) {
-        maxChild = this.storage[child1] > this.storage[child2] ? child1 : child2;
+        maxChild =
+          this.storage[child1] > this.storage[child2] ? child1 : child2;
       }
 
       if (this.storage[index] < this.storage[maxChild]) {
-        [this.storage[maxChild], this.storage[index]] = [this.storage[index], this.storage[maxChild]];
+        [this.storage[maxChild], this.storage[index]] = [
+          this.storage[index],
+          this.storage[maxChild]
+        ];
         this.siftDown(maxChild);
       }
     }
@@ -67,5 +105,5 @@ class Heap {
 
 module.exports = {
   Heap,
-  heapsort,
+  heapsort
 };
